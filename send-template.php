@@ -15,6 +15,21 @@
   $userPhone = $_POST['user-phone'];
   $userEmail = $_POST['user-email'];
 
+  //Скрытые поля
+  $userHiddenImg = $_POST['user-hidden-img'];
+  $userHiddenText = $_POST['user-hidden-text'];
+
+  //Шаблон письма
+  $mailTemplate = "
+                    <div style='background-color: darkgray;'>
+                      <img src='$userHiddenImg' style='width: 200px; height: 200px;  object-fit: cover;'>
+                      <p>$userHiddenText.</p>
+                      <p style='color: red; font-family: arial, helvetica, sans-serif; font-size: 30px; line-height: 120%;'>Имя: $userName.</p>
+                      <p>Телефон: $userPhone.</p>
+                      <p>Почта: $userEmail.</p>
+                    </div>
+                  ";
+
   try {
     //Server settings
     $mail->SMTPDebug  = SMTP::DEBUG_SERVER;
@@ -22,20 +37,20 @@
     $mail->isSMTP();
     $mail->Host       = 'smtp.yandex.ru';                       //SMTP сервер, зависит от почты отправки
     $mail->SMTPAuth   = true;                                   //Enable SMTP authentication
-    $mail->Username   = 'content2@fibotelecom.ru';                  //SMTP имя пользователя (почта с которой отправляем письмо)
-    $mail->Password   = 'bbolznuavwszejyw';                     //SMTP password (для яндех и мэйл ру генерируем по ссылке в инструкции, для gmail это пороль от почты)
+    $mail->Username   = 'ligaatest@yandex.ru';                  //SMTP имя пользователя (почта с которой отправляем письмо)
+    $mail->Password   = 'skfbddoaxyeiqglc';                     //SMTP password (для яндех и мэйл ру генерируем по ссылке в инструкции, для gmail это пороль от почты)
     $mail->SMTPSecure = 'ssl';                                  //Шифрование
     $mail->Port       = 465;                                    //Порт
 
     //Recipients
-    $mail->setFrom('content2@fibotelecom.ru');                       //Откуда отправляем
-    $mail->addAddress('vlad.ner1999@gmail.com');                 //Куда отправляем
+    $mail->setFrom('ligaatest@yandex.ru');                       //Откуда отправляем
+    $mail->addAddress('ligamailtest@gmail.com');                 //Куда отправляем
 
 
     //Content
     $mail->isHTML(true);                                         //Письмо в формате HTML для использования тегов
     $mail->Subject = "Заявка с сайта example.com";               //Тема письмы
-    $mail->Body = "Имя: $userName. <br>Телефон: $userPhone. <br>Почта: $userEmail"; //Тело письмы
+    $mail->Body = $mailTemplate; //Тело письмы
 
     $mail->send();
     echo 'Письмо отправлено!';
